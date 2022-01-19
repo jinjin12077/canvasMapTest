@@ -1,0 +1,122 @@
+@charset "utf-8";
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+
+
+html, body, div, span, h1, h2, h3, h4, h5, h6, p, 
+a, address, em, img, strong, sub, b, i, dl, dt, dd, ol, ul, li,
+form, label, table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, footer, header, nav, section, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+    vertical-align: baseline;
+    font-family: 'SDDOESGothic', '돋움', 'dotum', '굴림', 'gulim', sans-serif;
+    line-height: 1em;
+}
+
+/* ios 크롬 가로모드 진입시 텍스트 확대 방지 */
+body{
+    -webkit-text-size-adjust: 100%;
+}
+
+ul,li{
+    list-style: none;
+}
+
+a{
+    text-decoration: none;
+    -webkit-tap-highlight-color : transparent;
+}
+a:focus{
+	outline: none;
+}
+
+button{
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font-family: 'SDDOESGothic', '돋움', 'dotum', sans-serif;
+    line-height: 1em;
+    cursor: pointer;
+}
+
+button:focus {
+    outline: none;
+}
+
+input{
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;       /* 모바일 그림자 제거 */
+    border-radius: 0px;
+    font-family: 'SDDOESGothic', '돋움', 'dotum', '굴림', 'gulim', sans-serif;
+}
+
+input:focus {
+    outline: none;
+}
+
+/* 화살표 제거 */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+textarea{
+    border: none;
+    resize: none;
+    padding: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;       /* 모바일 그림자 제거 */
+    border-radius: 0px;
+    font-family: 'SDDOESGothic', '돋움', 'dotum', '굴림', 'gulim', sans-serif;
+}
+
+textarea:focus{
+    outline: none;
+}
+
+table{
+    border-spacing: 0;
+}
+
+em{
+    font-style: normal;
+}
+
+select{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    -webkit-border-radius:0; 
+    -moz-border-radius:0; 
+    -o-border-radius:0; 
+    border-radius:0;
+    padding: 0;
+    line-height: 1em;
+    font-family: 'SDDOESGothic', '돋움', 'dotum', '굴림', 'gulim', sans-serif;
+    background: transparent;
+}
+
+/* ie 화살표 제거 */
+select::-ms-expand {display:none}       
+
+select:focus{
+    outline: none;
+}
+
+
+img {-ms-interpolation-mode:bicubic;} 
