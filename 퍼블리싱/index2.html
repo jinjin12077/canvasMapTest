@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <style>
+        .box_wrap{width: 750px;height: 560px;border: 2px solid #000;position: relative;overflow: hidden;}
+        .box_wrap .boxs{width: 100%;height: 100%;font-size: 0;position: relative;z-index: 10;}
+        .box_wrap .boxs div{display: inline-block;vertical-align: top;width: 10px;height: 10px;}
+        .box_wrap .boxs div.on{background: blue;opacity: 0.5;}
+        .box_wrap img{width: 100%;position: absolute;top: 0;left: 0;}
+
+        .focus{border: 1px solid red;position: absolute; background: rgba(128,0,0, .3);}
+    </style>
+</head>
+<body>
+    <div class="box_wrap">
+        <div class="boxs"></div>
+        <img src="./images/floor_01.jpg" alt="">
+        <div class="focus"></div>
+    </div>
+
+    
+    <script>
+        function Box(_w, _h){
+            this.width = _w,
+            this.height = _h
+        }
+
+        function makeBox (_w, _h){
+            var box = new Box(_w, _h);
+            let boxs = document.getElementsByClassName("boxs")[0];
+            let canvas = document.getElementsByClassName('box_wrap')[0];
+            let canvas_w = canvas.clientWidth;
+            let canvas_h = canvas.clientHeight;
+            
+            let box_size = (canvas_w/box.width) * (canvas_h/box.height);
+            
+            for(i=0; i<box_size; i++){
+                const div = document.createElement('div');
+                div.setAttribute("class", "box");
+                div.setAttribute("attr", "box"+i);
+                boxs.append(div);
+            }
+        }
+        makeBox(10,10);
+
+        // let box = document.querySelectorAll(".box_wrap .box");
+        // for(i=0; i<box.length; i++){
+            
+        //     box[i].addEventListener("click", function(e){
+        //         this.classList.add("on");
+        //     });
+        // }
+        
+        let boxs = document.getElementsByClassName("boxs")[0];
+        let box = document.querySelectorAll(".boxs .box");
+        var startX = 0;
+        var startY = 0;
+        var new_width, new_height, new_top, new_left;
+        var $focus = document.getElementsByClassName("focus")[0];
+        var dragOn;
+        boxs.addEventListener('mousedown', function(e){
+            dragOn = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            
+        });
+
+        boxs.addEventListener('mousemove', function(e){
+            if( dragOn ){
+                var x = e.clientX;
+                var y = e.clientY;
+                //마우스 이동에 따라 선택 영역을 리사이징 한다
+                new_width = Math.max(x - startX, startX - x);
+                new_height = Math.max(y - startY, startY - y);
+                new_top = Math.min(startY, y);
+                new_left = Math.min(startX, x);
+            
+                $focus.style.display = 'block';
+
+                $focus.style.left = new_left+'px';
+                $focus.style.top = new_top+'px';
+                $focus.style.width = new_width+'px';
+                $focus.style.height = new_height+'px';
+            }
+        });
+
+        boxs.addEventListener("mouseup", function(e){
+            dragOn = false;
+
+            $focus.style.display = 'none';
+
+            //범위 내 객체를 선택한다.
+            rangeSelect(box, new_left, new_top, new_left+new_width, new_top+new_height);
+        });
+
+        function rangeSelect(selector, x1, y1, x2, y2) {
+            
+            for(i=0; i<selector.length; i++){
+                var $this = selector[i];
+                var x = $this.offsetLeft;
+                var y = $this.offsetTop;
+                var w = $this.clientWidth;
+                var h = $this.clientHeight;
+
+                
+                // 범위 안인지 체크
+                // cb.call(this, x >= x1 && y >= y1 && x + w <= x2 && y + h <= y2);
+                if( x >= x1 && y >= y1 && x + w <= x2 && y + h <= y2 ){
+                    $this.classList.add("on");
+                }else{
+                    // $this.classList.remove("on");
+                }
+            }
+            // $(selector).each(function() {
+            //     var $this = $(this);
+            //     var offset = $this.offset();
+            //     var x = offset.left;
+            //     var y = offset.top;
+            //     var w = $this.width();
+            //     var h = $this.height();
+            //     //범위 안인지 체크
+            //     cb.call(this, x >= x1 && y >= y1 && x + w <= x2 && y + h <= y2);
+            // });
+        }
+
+
+    </script>
+</body>
+</html>

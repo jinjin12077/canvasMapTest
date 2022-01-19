@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.3.1/fabric.min.js"></script>
+    <script src="js/jquery-1.9.1.min.js"></script>
+
+    <link rel="stylesheet" href="./css/reset.css">
+    <style>
+        .container{width: 750px;height: 600px;position: relative;margin: 10px;padding-right: 150px;}
+        #map{z-index: 100;position: relative;border: 1px solid #000;}
+        #canvas{width: 750px;height: 600px;}
+        .dot{background: red;width: 10px;height: 10px;position: absolute;}
+        .line{display: inline-block;border-top: 3px solid #000;position: absolute;}
+        .container img{position: absolute;top: 0;left: 0;width: 750px;z-index: 1;}
+
+        .btns_wrap{position: absolute;top: 0px;right: 0px;width: 150px;text-align: center;}
+        .btns_wrap button{padding: 5px 15px;font-size: 14px;border: 1px solid #555555;background: #f0f0f0;display: inline-block;margin-bottom: 5px;}
+        .add_btn{}
+    </style>
+</head>
+<body>
+    
+    <!--
+        fabric.js 활용
+    -->
+
+    <div class="container">
+        <div id="map">
+            <canvas id="c" width="750" height="600"></canvas>
+        </div>
+        <img src="./images/floor_01.jpg" alt="">
+        <div class="btns_wrap">
+            <button class="add_btn">추가</button>
+            <button class="delete_btn">삭제</button>
+            <button class="all_select">모두선택</button>
+            <button class="all_delete">모두삭제</button>
+        </div>
+    </div>
+    
+
+    <script>
+    (function() {
+        var canvas = this.__canvas = new fabric.Canvas('c');
+
+        // 추가
+        let add_btn = document.getElementsByClassName("add_btn")[0];
+        add_btn.addEventListener("click", function(e){
+            var rect = new fabric.Rect({
+                left: 10,
+                top: 10,
+                originX: 'left',
+                originY: 'top',
+                width: 50,
+                height: 50,
+                angle: 0,
+                fill: 'rgba(255,0,0,0.5)',
+                cornerSize: 9,
+                transparentCorners: false
+            });
+
+            canvas.add(rect).setActiveObject(rect);    
+        });
+
+        // 모두 삭제
+        let all_delete = document.getElementsByClassName("all_delete")[0];
+        all_delete.addEventListener("click", function(e){
+            
+            var selectedObj = canvas.getObjects();
+            for(i=0; i<selectedObj.length; i++){
+                canvas.remove(selectedObj[i]);
+            }
+            
+        });
+
+        // 모두 선택
+        let all_select = document.getElementsByClassName("all_select")[0];
+        all_select.addEventListener("click", function(e){
+            
+            canvas.discardActiveObject();       // 현재 활성 객체를 버리고 이벤트 발생
+            var sel = new fabric.ActiveSelection(canvas.getObjects(), {
+                canvas: canvas,
+            });
+            canvas.setActiveObject(sel);    // 주어진 객체를 캔버스의 유일한 활성 객체로 설정
+            canvas.requestRenderAll();
+
+        });
+
+        // 선택개체 삭제
+        let delete_btn = document.getElementsByClassName("delete_btn")[0];
+        delete_btn.addEventListener("click", function(e){
+            canvas.getActiveObjects().forEach((obj) => {
+                canvas.remove(obj)
+            });
+            canvas.discardActiveObject().renderAll()
+        });
+        
+
+
+    })();
+    </script>
+</body>
+</html>

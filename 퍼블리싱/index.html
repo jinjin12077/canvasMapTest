@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>canvas를 통해 맵 그리기</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.3.1/fabric.min.js"></script>
+    <script src="./js/jquery-1.9.1.min.js"></script>
+    <link rel="stylesheet" href="css/reset.css">
+
+    <style>
+        .container{width: 750px;height: 600px;border: 1px solid #000;position: relative;overflow: hidden;margin: 10px;}
+        #map{z-index: 100;position: relative;}
+        #canvas{width: 750px;height: 600px;}
+        .dot{background: red;width: 10px;height: 10px;position: absolute;}
+        .line{display: inline-block;border-top: 3px solid #000;position: absolute;}
+        .container img{position: absolute;top: 0;left: 0;width: 100%;z-index: 1;}
+    </style>
+
+    
+</head>
+<body>
+    <div class="container">
+        <div id="map">
+            <canvas id="canvas" width="750" height="600"></canvas>
+            
+        </div>
+        <img src="./images/floor_01.jpg" alt="">
+    </div>
+
+    <script>
+        // === fabric.js ===
+        // create / a wrapper / around native canvas element (with id="c")
+        // var canvas = new fabric.Canvas('canvas');
+
+        // // create a rectangle object
+        // var rect = new fabric.Rect({
+        //     left: 150,
+        //     top: 100,
+        //     fill: '#ff00ff',
+        //     width: 20,
+        //     height: 20,
+        //     opacity: 0.7
+        // });
+
+        // canvas.add(rect);
+
+        // var circle = new fabric.Circle({
+        //     radius: 20, fill: 'green', left: 200, top: 200
+        // });
+        // var triangle = new fabric.Triangle({
+        //     width: 20, height: 30, fill: 'blue', left: 50, top: 50
+        // });
+
+        // canvas.add(circle, triangle);
+
+        // rect.set({ strokeWidth: 5, stroke: 'rgba(100, 200, 200, 0.5)' });   // rect에 border 추가
+        // rect.set('angle', 15);   // rect에 rotate 적용
+
+
+        var mCanvas;
+        var line;
+        var isDown;
+
+        mCanvas = window._canvas = new fabric.Canvas('canvas');
+        mCanvas.selection = false;
+
+        mCanvas.on('mouse:down', function(e){
+            
+            isDown = true;
+            var pointer = mCanvas.getPointer(event.e);
+            var point = [pointer.x, pointer.y, pointer.x, pointer.y];
+            console.log(point);
+            line = new fabric.Line(point, {
+                // id : objectId,
+                strokeWidth : 2,
+                fill : 'rgba(245,0,7, 1)',
+                stroke : 'rgba(245,0,7, 1)',
+                originX : 'center',
+                originY : 'center'
+            });
+            mCanvas.add(line);
+        });        
+        
+        mCanvas.on('mouse:move', function(e){
+            if(!isDown) {
+                return;
+            }
+            var pointer = mCanvas.getPointer(event.e);
+            var firstVector = [pointer.x, pointer.y];
+            line.set({x2 : firstVector[0], y2 : firstVector[1]});
+            mCanvas.renderAll();
+
+        }); 
+        
+        mCanvas.on('mouse:up', function(e){
+
+            isDown = false;
+        
+        });
+
+
+    </script>
+
+    <!-- <script>
+        function drawDot(){
+            var ctx;
+            var canvas = document.getElementById("canvas");
+            if (canvas.getContext) {
+                ctx = canvas.getContext("2d");
+            }
+
+            canvas.addEventListener('click', function(e){
+                if (canvas.getContext) {
+                    var l = this.offsetLeft;
+                    var t = this.offsetTop;
+                    var x = e.pageX - l;
+                    var y = e.pageY - t;
+                    var w = 15;
+                    var h = 15;
+
+                    ctx.fillStyle = "rgb(255, 187, 0)";
+                    ctx.fillRect(x, y, w, h);
+                }
+            });
+
+            // if(){}
+        }
+
+        function drawLine(){
+            console.log('drawLine');
+        }
+
+        // drawDot();
+        // drawLine();
+
+
+        // 점 그리는 함수
+        function drawDot2(){
+            var canvas = document.getElementById("canvas");
+            var index = 0;
+
+            canvas.addEventListener('click', function(e){
+                var x = e.pageX;
+                var y = e.pageY;
+                var newDIV = document.createElement("div");
+
+                drawLine(x, y, index);
+
+                newDIV.setAttribute("class","dot");
+                newDIV.setAttribute("attr","dot-"+index);
+                newDIV.style.left = (x-10)+'px';
+                newDIV.style.top = (y-10)+'px';
+                canvas.appendChild(newDIV);
+
+                index++;
+            });
+
+            
+        }
+
+        // 선 그리는 함수
+        function drawLine(x, y, index){
+            if(canvas.childElementCount > 0){       // canvas 안에 하위요소가 있는지 확인
+                var dots = document.querySelectorAll('#canvas .dot');
+                var before_x = dots[index-1].offsetLeft;
+                var before_y = dots[index-1].offsetTop;
+                var dot_width = Math.sqrt( Math.pow((x - before_x), 2) + Math.pow((y - before_y), 2) );
+                var newLine = document.createElement("div");
+
+
+                newLine.setAttribute("class", "line");
+                newLine.setAttribute("attr", "line-"+index);
+                newLine.style.width = dot_width+'px';
+                newLine.style.left = before_x+'px';
+                newLine.style.top = before_y+'px';
+                
+                canvas.appendChild(newLine);
+            }
+            
+        }
+
+        drawDot2();
+    </script> -->
+</body>
+</html>
